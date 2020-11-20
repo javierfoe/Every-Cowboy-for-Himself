@@ -2,18 +2,23 @@
 {
     public Suit Suit { get; private set; }
     public Rank Rank { get; private set; }
-    public CardType Type { get; private set; }
+    public CardType CardType { get; private set; }
 
     public Card(CardType type)
     {
-        Type = type;
+        CardType = type;
     }
 
     public Card(CardType type, Rank rank, Suit suit)
     {
         Suit = suit;
         Rank = rank;
-        Type = type;
+        CardType = type;
+    }
+
+    public override string ToString()
+    {
+        return Rank + " " + Suit + " " + CardType;
     }
 }
 

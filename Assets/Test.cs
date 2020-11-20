@@ -1,18 +1,27 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class Test : MonoBehaviour
 {
-    public int players;
+    public int cards;
 
     // Start is called before the first frame update
     void Start()
     {
-        EveryCowboyForHimself.Setup(players);
-        Character character;
-        for(int i = 0; i < players; i++)
+        StartCoroutine(DrawDiscard());
+    }
+
+    IEnumerator DrawDiscard()
+    {
+        Board board = new Board();
+        List<Card> draws;
+        while (true)
         {
-            character = EveryCowboyForHimself.Characters[i];
-            Debug.Log(character.Role + " " + character.CharacterName);
+            draws = board.DrawCards(cards);
+            board.DiscardCards(draws);
+            Debug.Log(board);
+            yield return new WaitForSeconds(0.2f);
         }
     }
 }

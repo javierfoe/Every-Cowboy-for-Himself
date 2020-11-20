@@ -5,22 +5,55 @@ public class Board
     public readonly List<Card> Deck = new List<Card>();
     public readonly List<Card> DiscardStack = new List<Card>();
 
+    public Card TopDiscardStack => DiscardStack[DiscardStack.Count - 1];
+
     public Board()
     {
         List<Card> deck = GenerateBasicDeck();
         AddCardsToDeck(deck);
     }
-    
+
     public Board(List<Card> deck)
     {
         AddCardsToDeck(deck);
+    }
+
+    public List<Card> DrawCards(int amount)
+    {
+        if (Deck.Count < amount)
+        {
+            AddCardsToDeck(DiscardStack);
+            DiscardStack.Clear();
+        }
+        List<Card> result = new List<Card>();
+        for (int i = 0; i < amount; i++)
+        {
+            result.Add(Deck[0]);
+            Deck.RemoveAt(0);
+        }
+        return result;
+    }
+
+    public void DiscardCard(Card card)
+    {
+        DiscardStack.Add(card);
+    }
+
+    public void DiscardCards(List<Card> cards)
+    {
+        DiscardStack.AddRange(cards);
+    }
+
+    public override string ToString()
+    {
+        return "Deck: " + Deck.Count + " Discard: " + DiscardStack.Count;
     }
 
     private void AddCardsToDeck(List<Card> cards)
     {
         int random;
         Card card;
-        while(cards.Count > 0)
+        while (cards.Count > 0)
         {
             random = UnityEngine.Random.Range(0, cards.Count);
             card = cards[random];
@@ -38,7 +71,7 @@ public class Board
         deck.Add(new Card(CardType.Bam, Rank.Ace, Suit.Hearts));
         deck.Add(new Card(CardType.Bam, Rank.Queen, Suit.Hearts));
         deck.Add(new Card(CardType.Bam, Rank.King, Suit.Hearts));
-        for(int i = 1; i < 14; i++)
+        for (int i = 1; i < 14; i++)
             deck.Add(new Card(CardType.Bam, (Rank)i, Suit.Diamonds));
         for (int i = 2; i < 10; i++)
             deck.Add(new Card(CardType.Bam, (Rank)i, Suit.Clubs));
@@ -46,7 +79,7 @@ public class Board
         //Missed
         for (int i = 2; i < 9; i++)
             deck.Add(new Card(CardType.Missed, (Rank)i, Suit.Spades));
-        for(int i = 10; i < 14; i++)
+        for (int i = 10; i < 14; i++)
             deck.Add(new Card(CardType.Missed, (Rank)i, Suit.Clubs));
         deck.Add(new Card(CardType.Missed, Rank.Ace, Suit.Clubs));
 

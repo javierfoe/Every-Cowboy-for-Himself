@@ -10,12 +10,53 @@ public class Character
     public readonly List<Card> Hand = new List<Card>();
     public readonly List<Card> Properties = new List<Card>();
 
+    private int maxHP;
+
     public Character(Role role, CharacterName characterName)
     {
         Role = role;
         CharacterName = characterName;
         HP = GetHPCharacter(characterName);
         HP += role == Role.Sheriff ? 1 : 0;
+        maxHP = HP;
+    }
+
+    public void RestoreHealth(int amount)
+    {
+        HP += amount;
+        HP = HP > maxHP ? maxHP : HP;
+    }
+
+    public void Hit(int amount)
+    {
+        HP -= amount;
+    }
+
+    public void AddCardsHand(List<Card> drawn)
+    {
+        Hand.AddRange(drawn);
+    }
+
+    public Card RemoveCardHand(int index)
+    {
+        return RemoveCardList(index, Hand);
+    }
+
+    public void EquipCard(Card card)
+    {
+        Properties.Add(card);
+    }
+
+    public Card UnequipCard(int index)
+    {
+        return RemoveCardList(index, Properties);
+    }
+
+    private Card RemoveCardList(int index, List<Card> cards)
+    {
+        Card card = cards[index];
+        cards.RemoveAt(index);
+        return card;
     }
 
     private int GetHPCharacter(CharacterName name)
@@ -45,6 +86,26 @@ public class Character
                 break;
         }
         return hp;
+    }
+
+    public override string ToString()
+    {
+        string result = "Character: " + CharacterName;
+        result += "\nRole: " + Role;
+        result += "\nHP: " + HP;
+        result += "\nCards: ";
+        int length = Hand.Count;
+        for(int i = 0; i < length; i++)
+        {
+            result += "\n\t" + Hand[i];
+        }
+        result += "\nProperties: ";
+        length = Properties.Count;
+        for(int i = 0; i < length; i++)
+        {
+            result += "\n\t" + Properties[i];
+        }
+        return result;
     }
 }
 

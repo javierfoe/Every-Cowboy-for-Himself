@@ -3,15 +3,13 @@ using UnityEngine;
 
 public static class EveryCowboyForHimself
 {
-    public static Character[] Characters { get; private set; }
-    public static Board Board { get; private set; }
+    private static Character[] characters;
+    private static Board board;
 
     public static void Setup(int players, Role[] roles = null, CharacterName[] allowedCharacters = null)
     {
         //Initialize board
-        Board = new Board();
-
-        Characters = new Character[players];
+        board = new Board();
 
         //Set selection of roles
         List<Role> possibleRoles;
@@ -48,6 +46,7 @@ public static class EveryCowboyForHimself
         }
 
         //Choose random characters and roles
+        characters = new Character[players];
         int randomCharacter, randomRole;
         CharacterName character;
         Role role;
@@ -59,7 +58,39 @@ public static class EveryCowboyForHimself
             character = possibleCharacters[randomCharacter];
             possibleCharacters.RemoveAt(randomCharacter);
             possibleRoles.RemoveAt(randomRole);
-            Characters[i] = new Character(role, character);
+            characters[i] = new Character(role, character);
+        }
+    }
+
+    public static void PlayerDrawsCards(int player, int amount)
+    {
+        List<Card> drawn = DrawCards(amount);
+        characters[player].AddCardsHand(drawn);
+    }
+
+    public static void PlayerDiscardsCard(int player, int card)
+    {
+        Card discarded = characters[player].RemoveCardHand(card);
+        DiscardCard(discarded);
+    }
+
+    public static List<Card> DrawCards(int amount)
+    {
+        return board.DrawCards(amount);
+    }
+
+    public static void DiscardCard(Card card)
+    {
+        board.DiscardCard(card);
+    }
+
+    public static void PrintStatus()
+    {
+        Debug.Log(board);
+        int length = characters.Length;
+        for(int i = 0; i < length; i++)
+        {
+            Debug.Log(characters[i]);
         }
     }
 

@@ -11,6 +11,7 @@ public class Character
     public CharacterName CharacterName { get; private set; }
     public bool IsDead => HP < 1;
     public int HP { get; private set; }
+    public bool Skill { get; set; }
 
     private int maxHP;
 

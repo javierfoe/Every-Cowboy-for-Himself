@@ -2,21 +2,17 @@
 
 public class Test : MonoBehaviour
 {
+    public int players;
+
     // Start is called before the first frame update
     void Start()
     {
-        EveryCowboyForHimself everyCowboyForHimself = new EveryCowboyForHimself(4);
+        EveryCowboyForHimself.Setup(players);
         Character character;
-        for(int i = 0; i < 4; i++)
+        for(int i = 0; i < players; i++)
         {
-            character = everyCowboyForHimself.Characters[i];
+            character = EveryCowboyForHimself.Characters[i];
             Debug.Log(character.Role + " " + character.CharacterName);
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

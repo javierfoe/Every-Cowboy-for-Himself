@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class EveryCowboyForHimself
+public static class EveryCowboyForHimself
 {
-    public Character[] Characters { get; private set; }
-    public Board Board { get; private set; }
+    public static Character[] Characters { get; private set; }
+    public static Board Board { get; private set; }
 
-    public EveryCowboyForHimself(int players, Role[] roles = null, CharacterName[] allowedCharacters = null)
+    public static void Setup(int players, Role[] roles = null, CharacterName[] allowedCharacters = null)
     {
         //Initialize board
         Board = new Board();
@@ -63,7 +63,7 @@ public class EveryCowboyForHimself
         }
     }
 
-    private List<Role> GetRolesFromPlayers(int players)
+    private static List<Role> GetRolesFromPlayers(int players)
     {
         List<Role> roles = new List<Role>();
         switch (players)

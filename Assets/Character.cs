@@ -12,6 +12,8 @@ public class Character
 
     public Character(Role role, CharacterName characterName)
     {
+        Role = role;
+        CharacterName = characterName;
         HP = GetHPCharacter(characterName);
         HP += role == Role.Sheriff ? 1 : 0;
     }

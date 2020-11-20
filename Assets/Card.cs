@@ -1,5 +1,7 @@
 ﻿public class Card
 {
+    public static Card Colt45 = new Card(CardType.Colt45);
+
     public Suit Suit { get; private set; }
     public Rank Rank { get; private set; }
     public CardType CardType { get; private set; }

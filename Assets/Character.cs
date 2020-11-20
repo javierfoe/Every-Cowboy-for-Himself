@@ -4,11 +4,13 @@ public class Character
 {
     public const int Amount = 48;
 
-    public Role Role { get; private set; }
-    public CharacterName CharacterName { get; private set; }
-    public int HP { get; private set; }
     public readonly List<Card> Hand = new List<Card>();
     public readonly List<Card> Properties = new List<Card>();
+    public Card Weapon { get; private set; }
+    public Role Role { get; private set; }
+    public CharacterName CharacterName { get; private set; }
+    public bool IsDead => HP < 1;
+    public int HP { get; private set; }
 
     private int maxHP;
 
@@ -19,6 +21,7 @@ public class Character
         HP = GetHPCharacter(characterName);
         HP += role == Role.Sheriff ? 1 : 0;
         maxHP = HP;
+        Weapon = Card.Colt45;
     }
 
     public void RestoreHealth(int amount)
@@ -50,6 +53,22 @@ public class Character
     public Card UnequipCard(int index)
     {
         return RemoveCardList(index, Properties);
+    }
+
+    public Card EquipWeapon(Card card)
+    {
+        Card res = null;
+        if (Weapon != Card.Colt45)
+        {
+            res = Weapon;
+        }
+        Weapon = card;
+        return res;
+    }
+
+    public Card UnequipWeapon()
+    {
+        return EquipWeapon(Card.Colt45);
     }
 
     private Card RemoveCardList(int index, List<Card> cards)

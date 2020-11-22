@@ -3,6 +3,8 @@ using UnityEngine;
 
 public static class EveryCowboyForHimself
 {
+    private static int players;
+    private static int currentTurn = 0;
     private static Character[] characters;
     private static Board board;
 
@@ -46,6 +48,7 @@ public static class EveryCowboyForHimself
         }
 
         //Choose random characters and roles
+        EveryCowboyForHimself.players = players;
         characters = new Character[players];
         int randomCharacter, randomRole;
         CharacterName character;
@@ -60,6 +63,17 @@ public static class EveryCowboyForHimself
             possibleRoles.RemoveAt(randomRole);
             characters[i] = new Character(role, character);
         }
+    }
+
+    public static void EndTurn(int player)
+    {
+        if (currentTurn != player) return;
+        currentTurn = currentTurn < players - 1 ? currentTurn + 1 : 0;
+    }
+
+    public static void PlayerGetsHit(int player, int hits = 1)
+    {
+        characters[player].Hit(hits);
     }
 
     public static void PlayerDrawsCards(int player, int amount)

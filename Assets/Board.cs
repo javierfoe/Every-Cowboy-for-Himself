@@ -18,18 +18,26 @@ public class Board
         AddCardsToDeck(deck);
     }
 
-    public List<Card> DrawCards(int amount)
+    public Card DrawCard()
     {
-        if (Deck.Count < amount)
+        if(Deck.Count < 1)
         {
             AddCardsToDeck(DiscardStack);
             DiscardStack.Clear();
         }
+        Card result = Deck[0];
+        Deck.RemoveAt(0);
+        return result;
+    }
+
+    public List<Card> DrawCards(int amount)
+    {
         List<Card> result = new List<Card>();
+        Card aux;
         for (int i = 0; i < amount; i++)
         {
-            result.Add(Deck[0]);
-            Deck.RemoveAt(0);
+            aux = DrawCard();
+            result.Add(aux);
         }
         return result;
     }

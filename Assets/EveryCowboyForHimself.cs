@@ -178,7 +178,7 @@ public static class EveryCowboyForHimself
         return res;
     }
 
-    public static IEnumerator UsedCard<T>(Player player) where T : Card
+    public static IEnumerator CardUsed(Player player, Card card)
     {
         int index = player.Index;
         Player aux;
@@ -186,7 +186,7 @@ public static class EveryCowboyForHimself
         {
             aux = players[i];
             if (!aux.IsDead)
-                yield return players[i].UsedCard<T>(index);
+                yield return players[i].UsedCard(index, card);
         }
     }
 
@@ -203,6 +203,10 @@ public static class EveryCowboyForHimself
         {
             yield return HitPlayer(player, target);
         }
+    }
+    public static IEnumerator Gatling(int player, Card c)
+    {
+        yield return new GatlingCoroutine(players, player, c);
     }
 
     public static IEnumerator CatBalou(Player player, int target, Selection selection, int cardIndex)
@@ -223,6 +227,17 @@ public static class EveryCowboyForHimself
         }
         DiscardCard(c);
         yield return targetPlayer.StolenBy(player);
+    }
+
+    public static IEnumerator Duel(Player player, int target)
+    {
+        yield return new DuelCoroutine(player, players[target]);
+    }
+
+    public static IEnumerator GeneralStore(int player)
+    {
+        List<Card> cardChoices = board.DrawCards(PlayersAlive);
+        yield return new GeneralStoreCoroutine(players, player, cardChoices);
     }
 
     public static IEnumerator HitPlayer(Player player, Player target)

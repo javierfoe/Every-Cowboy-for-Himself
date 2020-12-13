@@ -23,6 +23,19 @@ public abstract class Card
         CardType = type;
     }
 
+    public Card ConvertTo<T>() where T : Card, new()
+    {
+        if (this is T) return this;
+        Card converted = new T();
+        return new ConvertedCard(this, converted);
+    }
+
+    public IEnumerator CardUsed(Player player)
+    {
+        Card usedCard = RetrieveUsedCard();
+        yield return EveryCowboyForHimself.CardUsed(player, usedCard);
+    }
+
     public virtual bool Is<T>() where T : Card
     {
         return this is T;
@@ -32,6 +45,7 @@ public abstract class Card
     {
         return Suit == suit;
     }
+
     public virtual void BeginCardDrag(Player player) { }
 
     public virtual IEnumerator PlayCard(Player player, int target, Selection drop, int cardIndex)
@@ -47,14 +61,7 @@ public abstract class Card
         yield return null;
     }
 
-    public abstract IEnumerator CardUsed(Player player);
-
-    public Card ConvertTo<T>() where T : Card, new()
-    {
-        if (this is T) return this;
-        Card converted = new T();
-        return new ConvertedCard(this, converted);
-    }
+    protected virtual Card RetrieveUsedCard() { return this; }
 
     public override string ToString()
     {

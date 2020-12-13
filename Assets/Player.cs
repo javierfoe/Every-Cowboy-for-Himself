@@ -211,6 +211,12 @@ public class Player
         yield return EveryCowboyForHimself.CatBalou(this, target, selection, cardIndex);
     }
 
+    public IEnumerator DrawFromCard(int amount)
+    {
+        DrawCards(amount);
+        yield return null;
+    }
+
     public virtual bool Immune(Card c) { return false; }
 
     public virtual bool EndTurnDiscardPickup(int player) { return false; }
@@ -225,7 +231,7 @@ public class Player
 
     public virtual IEnumerator StolenBy(Player thief) { yield return null; }
 
-    public virtual IEnumerator UsedCard<T>(int player) where T : Card { yield return null; }
+    public virtual IEnumerator UsedCard(int player, Card card) { yield return null; }
 
     public virtual void UsedSkillCard() { }
 

@@ -20,7 +20,7 @@ public class Board
 
     public Card DrawCard()
     {
-        if(Deck.Count < 1)
+        if (Deck.Count < 1)
         {
             AddCardsToDeck(DiscardStack);
             DiscardStack.Clear();
@@ -93,7 +93,7 @@ public class Board
 
         //Beer
         for (int i = 6; i < 12; i++)
-            deck.Add(new Card(CardType.Beer, (Rank)i, Suit.Hearts));
+            deck.Add(new Beer((Rank)i, Suit.Hearts));
 
         //Panic
         deck.Add(new Card(CardType.Panic, Rank.Ace, Suit.Hearts));
@@ -102,23 +102,23 @@ public class Board
         deck.Add(new Card(CardType.Panic, Rank.Eight, Suit.Diamonds));
 
         //Cat Balou
-        deck.Add(new Card(CardType.CatBalou, Rank.King, Suit.Hearts));
-        deck.Add(new Card(CardType.CatBalou, Rank.Nine, Suit.Diamonds));
-        deck.Add(new Card(CardType.CatBalou, Rank.Ten, Suit.Diamonds));
-        deck.Add(new Card(CardType.CatBalou, Rank.Jack, Suit.Diamonds));
+        deck.Add(new CatBalou(Rank.King, Suit.Hearts));
+        deck.Add(new CatBalou(Rank.Nine, Suit.Diamonds));
+        deck.Add(new CatBalou(Rank.Ten, Suit.Diamonds));
+        deck.Add(new CatBalou(Rank.Jack, Suit.Diamonds));
 
         //Duel
-        deck.Add(new Card(CardType.Duel, Rank.Jack, Suit.Spades));
-        deck.Add(new Card(CardType.Duel, Rank.Queen, Suit.Diamonds));
-        deck.Add(new Card(CardType.Duel, Rank.Eight, Suit.Clubs));
+        deck.Add(new Duel(Rank.Jack, Suit.Spades));
+        deck.Add(new Duel(Rank.Queen, Suit.Diamonds));
+        deck.Add(new Duel(Rank.Eight, Suit.Clubs));
 
         //Stagecoach
         deck.Add(new Card(CardType.Stagecoach, Rank.Nine, Suit.Spades));
         deck.Add(new Card(CardType.Stagecoach, Rank.Nine, Suit.Spades));
 
         //General Store
-        deck.Add(new Card(CardType.GeneralStore, Rank.Queen, Suit.Spades));
-        deck.Add(new Card(CardType.GeneralStore, Rank.Nine, Suit.Clubs));
+        deck.Add(new GeneralStore(Rank.Queen, Suit.Spades));
+        deck.Add(new GeneralStore(Rank.Nine, Suit.Clubs));
 
         //Indians
         deck.Add(new Card(CardType.Indians, Rank.Ace, Suit.Diamonds));
@@ -128,7 +128,7 @@ public class Board
         deck.Add(new Card(CardType.Saloon, Rank.Five, Suit.Hearts));
 
         //Gatling
-        deck.Add(new Card(CardType.Gatling, Rank.Ten, Suit.Hearts));
+        deck.Add(new Gatling(Rank.Ten, Suit.Hearts));
 
         //Wells Fargo
         deck.Add(new Card(CardType.WellsFargo, Rank.Three, Suit.Hearts));

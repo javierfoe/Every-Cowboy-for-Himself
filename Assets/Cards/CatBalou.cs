@@ -1,5 +1,4 @@
-﻿
-using System.Collections;
+﻿using System.Collections;
 
 public class CatBalou : Card
 {
@@ -14,10 +13,5 @@ public class CatBalou : Card
     protected virtual IEnumerator StealCard(Player player, int target, Selection selection, int cardIndex)
     {
         yield return player.CatBalou(target, selection, cardIndex);
-    }
-
-    public override IEnumerator CardUsed(Player player)
-    {
-        yield return EveryCowboyForHimself.UsedCard<CatBalou>(player);
     }
 }

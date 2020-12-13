@@ -9,9 +9,4 @@ public class Beer : Card
         yield return base.CardEffect(player, target, drop, cardIndex);
         player.HealFromBeer();
     }
-
-    public override IEnumerator CardUsed(Player pc)
-    {
-        yield return EveryCowboyForHimself.UsedCard<Beer>(pc);
-    }
 }

@@ -5,8 +5,7 @@ public class DrawEffectCoroutine : Enumerator
     public Card DrawEffectCard { get; private set; }
 
     private List<Card> drawnCards;
-    private Player player;
-    private int currentCard, maxCards;
+    private int player, currentCard, maxCards;
     private bool drawEffectStarted;
 
     public override bool MoveNext()
@@ -25,7 +24,7 @@ public class DrawEffectCoroutine : Enumerator
         }
         if (drawEffectStarted && currentCard < maxCards)
         {
-            Current = EveryCowboyForHimself.DrawEffect(player.Index, drawnCards[currentCard++]);
+            Current = EveryCowboyForHimself.DrawEffect(player, drawnCards[currentCard++]);
             return true;
         }
         if (maxCards > 0 && currentCard == maxCards) return false;
@@ -34,7 +33,7 @@ public class DrawEffectCoroutine : Enumerator
 
     public DrawEffectCoroutine(Player player)
     {
-        this.player = player;
+        this.player = player.Index;
 
         int drawEffectCards = player.DrawEffectCards;
 

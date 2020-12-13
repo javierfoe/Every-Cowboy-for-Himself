@@ -22,17 +22,12 @@ public class ConvertedCard : Card
         yield return converted.CardEffect(player, target, drop, cardIndex);
     }
 
-    public override IEnumerator CardUsed(Player pc)
-    {
-        pc.UsedSkillCard();
-        yield return original.CardUsed(pc);
-    }
-
     public override bool Is<T>()
     {
         if (typeof(T) == typeof(ConvertedCard)) return true;
         return converted.Is<T>();
     }
+    protected override Card RetrieveUsedCard() { return Original; }
 
     public override string ToString()
     {

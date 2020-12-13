@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class Player
 {
@@ -20,6 +21,7 @@ public class Player
     public Card Weapon { get; private set; }
     public Role Role { get; private set; }
     public CharacterName CharacterName { get; private set; }
+    protected int BeerHeal { get; set; }
 
     private int maxHP, index;
 
@@ -63,12 +65,37 @@ public class Player
 
     public Card RemoveCardHand(int index)
     {
-        return RemoveCardList(index, Hand);
+        if (index < 0)
+        {
+            index = Random.Range(0, Hand.Count - 1);
+        }
+        Card result = RemoveCardList(index, Hand);
+        CheckNoCards();
+        return result;
+    }
+
+    public void RemoveCardHand(Card card)
+    {
+        Hand.Remove(card);
+        CheckNoCards();
+    }
+
+    public void DiscardCardHand(Card card)
+    {
+        RemoveCardHand(card);
+        EveryCowboyForHimself.DiscardCard(card);
     }
 
     public void EquipCard(Card card)
     {
         Properties.Add(card);
+    }
+
+    public Card StealCardFromHand(int index = -1)
+    {
+        Card res = RemoveCardHand(index);
+        CheckNoCards();
+        return res;
     }
 
     public Card UnequipCard(int index)
@@ -117,6 +144,25 @@ public class Player
         }
     }
 
+    public void HealFromBeer()
+    {
+        if (!EveryCowboyForHimself.FinalDuel) RestoreHealth(BeerHeal);
+    }
+
+    public void FinishCardUsed()
+    {
+        if (IsDead)
+        {
+            ForceEndTurn();
+            return;
+        }
+        CheckNoCards();
+        if (!IsDying)
+        {
+            Phase2();
+        }
+    }
+
     public IEnumerator GetHitBy(Player player, int amount = 1)
     {
         yield return Hit(player, amount);
@@ -160,11 +206,28 @@ public class Player
         }
     }
 
+    public IEnumerator CatBalou(int target, Selection selection, int cardIndex)
+    {
+        yield return EveryCowboyForHimself.CatBalou(this, target, selection, cardIndex);
+    }
+
     public virtual bool Immune(Card c) { return false; }
 
     public virtual bool EndTurnDiscardPickup(int player) { return false; }
 
     public virtual bool DrawEffectPickup(int player) { return false; }
+
+    public virtual void ForceEndTurn()
+    {
+        OriginalHand();
+        EveryCowboyForHimself.EndTurn(Index);
+    }
+
+    public virtual IEnumerator StolenBy(Player thief) { yield return null; }
+
+    public virtual IEnumerator UsedCard<T>(int player) where T : Card { yield return null; }
+
+    public virtual void UsedSkillCard() { }
 
     protected virtual void CardUsedOutOfTurn() { }
 
@@ -173,6 +236,28 @@ public class Player
     protected virtual IEnumerator HitTrigger(Player attacker) { yield return null; }
 
     protected virtual IEnumerator DieTrigger(Player attacker) { yield return null; }
+
+    protected void OriginalHand()
+    {
+        Card c, original;
+        int length = Hand.Count;
+        for (int i = 0; i < length; i++)
+        {
+            c = Hand[i];
+            original = c.Original;
+            if (original != null)
+            {
+                Hand[i] = original;
+            }
+        }
+    }
+    protected void Phase2()
+    {
+        if (IsDead)
+        {
+            ForceEndTurn();
+        }
+    }
 
     private Card RemoveCardList(int index, List<Card> cards)
     {

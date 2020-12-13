@@ -29,7 +29,7 @@
             Card drawEffectCard = drawEffectCoroutine.DrawEffectCard;
             dodge = EveryCowboyForHimself.CheckConditionBarrel(drawEffectCard);
             dodges += dodge ? 1 : 0;
-            Current = EveryCowboyForHimself.BarrelEffect(character, drawEffectCard, dodge);
+            Current = EveryCowboyForHimself.BarrelEffect(character, drawEffectCard);
             return true;
         }
         if (dodges < misses && currentDecision != Decision.TakeHit)

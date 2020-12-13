@@ -2,14 +2,38 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum Selection
+{
+    Nothing,
+    Board,
+    Hand,
+    Properties,
+    Weapon
+}
+
 public static class EveryCowboyForHimself
 {
     private const float eventTime = 1f;
 
-    private static int players;
+    public static bool FinalDuel => PlayersAlive < 3;
+
+    private static int playerAmount;
     private static int currentTurn = 0;
-    private static Player[] characters;
+    private static Player[] players;
     private static Board board;
+
+    public static int PlayersAlive
+    {
+        get
+        {
+            int res = 0;
+            for (int i = 0; i < playerAmount; i++)
+            {
+                res += players[i].IsDead ? 0 : 1;
+            }
+            return res;
+        }
+    }
 
     public static void Setup(int players, Role[] roles = null, CharacterName[] allowedCharacters = null)
     {
@@ -51,8 +75,8 @@ public static class EveryCowboyForHimself
         }
 
         //Choose random characters and roles
-        EveryCowboyForHimself.players = players;
-        characters = new Player[players];
+        EveryCowboyForHimself.playerAmount = players;
+        EveryCowboyForHimself.players = new Player[players];
         int randomCharacter, randomRole;
         CharacterName character;
         Role role;
@@ -64,45 +88,45 @@ public static class EveryCowboyForHimself
             character = possibleCharacters[randomCharacter];
             possibleCharacters.RemoveAt(randomCharacter);
             possibleRoles.RemoveAt(randomRole);
-            characters[i] = new Player(role, character, i);
+            EveryCowboyForHimself.players[i] = new Player(role, character, i);
         }
     }
 
     public static bool IsDying(int player)
     {
-        return characters[player].IsDying;
+        return players[player].IsDying;
     }
 
     public static int DrawEffectCards(int player)
     {
-        return characters[player].DrawEffectCards;
+        return players[player].DrawEffectCards;
     }
 
     public static bool CheckConditionBarrel(Card card)
     {
-        return card.Suit == Suit.Hearts;
+        return card.IsSuit(Suit.Hearts);
     }
 
     public static void EndTurn(int player)
     {
         if (currentTurn != player) return;
-        currentTurn = currentTurn < players - 1 ? currentTurn + 1 : 0;
+        currentTurn = currentTurn < playerAmount - 1 ? currentTurn + 1 : 0;
     }
 
     public static void PlayerGetsHit(int player, int hits = 1)
     {
-        characters[player].Hit(hits);
+        players[player].Hit(hits);
     }
 
     public static void PlayerDrawsCards(int player, int amount)
     {
         List<Card> drawn = DrawCards(amount);
-        characters[player].AddCardsHand(drawn);
+        players[player].AddCardsHand(drawn);
     }
 
     public static void PlayerDiscardsCard(int player, int card)
     {
-        Card discarded = characters[player].RemoveCardHand(card);
+        Card discarded = players[player].RemoveCardHand(card);
         DiscardCard(discarded);
     }
 
@@ -120,6 +144,12 @@ public static class EveryCowboyForHimself
     {
         board.DiscardCard(card);
     }
+
+    public static void EquipPropertyTo(int target, Property p)
+    {
+        p.EquipProperty(players[target]);
+    }
+
     public static List<int> PlayersInWeaponRange(int player, int weaponRange)
     {
         return PlayersInRange(player, weaponRange, false);
@@ -142,13 +172,25 @@ public static class EveryCowboyForHimself
         do
         {
             res++;
-            res = res < players ? res : 0;
-            pc = characters[res];
+            res = res < playerAmount ? res : 0;
+            pc = players[res];
         } while (pc.IsDead);
         return res;
     }
 
-    public static IEnumerator BarrelEffect(Player target, Card c, bool dodge)
+    public static IEnumerator UsedCard<T>(Player player) where T : Card
+    {
+        int index = player.Index;
+        Player aux;
+        for (int i = index, j = 0; j < playerAmount; i = i == playerAmount - 1 ? 0 : i + 1, j++)
+        {
+            aux = players[i];
+            if (!aux.IsDead)
+                yield return players[i].UsedCard<T>(index);
+        }
+    }
+
+    public static IEnumerator BarrelEffect(Player target, Card c)
     {
         yield return DrawEffect(target.Index, c);
     }
@@ -161,6 +203,26 @@ public static class EveryCowboyForHimself
         {
             yield return HitPlayer(player, target);
         }
+    }
+
+    public static IEnumerator CatBalou(Player player, int target, Selection selection, int cardIndex)
+    {
+        Player targetPlayer = players[target];
+        Card c = null;
+        switch (selection)
+        {
+            case Selection.Hand:
+                c = targetPlayer.StealCardFromHand(cardIndex);
+                break;
+            case Selection.Properties:
+                c = targetPlayer.UnequipCard(cardIndex);
+                break;
+            case Selection.Weapon:
+                c = targetPlayer.UnequipWeapon();
+                break;
+        }
+        DiscardCard(c);
+        yield return targetPlayer.StolenBy(player);
     }
 
     public static IEnumerator HitPlayer(Player player, Player target)
@@ -189,10 +251,10 @@ public static class EveryCowboyForHimself
     public static void PrintStatus()
     {
         Debug.Log(board);
-        int length = characters.Length;
+        int length = players.Length;
         for (int i = 0; i < length; i++)
         {
-            Debug.Log(characters[i]);
+            Debug.Log(players[i]);
         }
     }
 
@@ -203,8 +265,8 @@ public static class EveryCowboyForHimself
         do
         {
             res--;
-            res = res > -1 ? res : players - 1;
-            pc = characters[res];
+            res = res > -1 ? res : playerAmount - 1;
+            pc = players[res];
         } while (pc.IsDead);
         return res;
     }
@@ -218,7 +280,7 @@ public static class EveryCowboyForHimself
         do
         {
             next = forward ? NextPlayerAlive(next) : PreviousPlayerAlive(next);
-            character = characters[next];
+            character = EveryCowboyForHimself.players[next];
             dead = character.IsDead;
             auxRange += dead ? 0 : 1;
             if (!players.Contains(next) && !dead && (includeItself || next != player) && character.RangeModifier + auxRange < range + 1 && (c == null || c != null && !character.Immune(c))) players.Add(next);
@@ -245,9 +307,9 @@ public static class EveryCowboyForHimself
         pc = null;
         bool res = false;
         Player aux;
-        for (int i = player, j = 0; j < players; i = i == players - 1 ? 0 : i + 1, j++)
+        for (int i = player, j = 0; j < playerAmount; i = i == playerAmount - 1 ? 0 : i + 1, j++)
         {
-            aux = characters[i];
+            aux = players[i];
             res |= discardDrawEffect ? aux.EndTurnDiscardPickup(player) : aux.DrawEffectPickup(player);
             pc = pc == null && res ? aux : pc;
         }

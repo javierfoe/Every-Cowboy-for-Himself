@@ -3,6 +3,7 @@
 public class CatBalou : Card
 {
     public CatBalou(Rank rank, Suit suit) : base(CardType.CatBalou, rank, suit) { }
+    protected CatBalou(CardType cardType, Rank rank, Suit suit) : base(cardType, rank, suit) { }
 
     public override IEnumerator CardEffect(Player player, int target, Selection selection, int cardIndex)
     {

@@ -96,10 +96,10 @@ public class Board
             deck.Add(new Beer((Rank)i, Suit.Hearts));
 
         //Panic
-        deck.Add(new Card(CardType.Panic, Rank.Ace, Suit.Hearts));
-        deck.Add(new Card(CardType.Panic, Rank.Jack, Suit.Hearts));
-        deck.Add(new Card(CardType.Panic, Rank.Queen, Suit.Hearts));
-        deck.Add(new Card(CardType.Panic, Rank.Eight, Suit.Diamonds));
+        deck.Add(new Panic(Rank.Ace, Suit.Hearts));
+        deck.Add(new Panic(Rank.Queen, Suit.Hearts));
+        deck.Add(new Panic(Rank.Eight, Suit.Diamonds));
+        deck.Add(new Panic(Rank.Jack, Suit.Hearts));
 
         //Cat Balou
         deck.Add(new CatBalou(Rank.King, Suit.Hearts));
@@ -113,43 +113,43 @@ public class Board
         deck.Add(new Duel(Rank.Eight, Suit.Clubs));
 
         //Stagecoach
-        deck.Add(new Card(CardType.Stagecoach, Rank.Nine, Suit.Spades));
-        deck.Add(new Card(CardType.Stagecoach, Rank.Nine, Suit.Spades));
+        deck.Add(new Stagecoach(Rank.Nine, Suit.Spades));
+        deck.Add(new Stagecoach(Rank.Nine, Suit.Spades));
 
         //General Store
         deck.Add(new GeneralStore(Rank.Queen, Suit.Spades));
         deck.Add(new GeneralStore(Rank.Nine, Suit.Clubs));
 
         //Indians
-        deck.Add(new Card(CardType.Indians, Rank.Ace, Suit.Diamonds));
-        deck.Add(new Card(CardType.Indians, Rank.King, Suit.Diamonds));
+        deck.Add(new Indians(Rank.Ace, Suit.Diamonds));
+        deck.Add(new Indians(Rank.King, Suit.Diamonds));
 
         //Saloon
-        deck.Add(new Card(CardType.Saloon, Rank.Five, Suit.Hearts));
+        deck.Add(new Saloon(Rank.Five, Suit.Hearts));
 
         //Gatling
         deck.Add(new Gatling(Rank.Ten, Suit.Hearts));
 
         //Wells Fargo
-        deck.Add(new Card(CardType.WellsFargo, Rank.Three, Suit.Hearts));
+        deck.Add(new WellsFargo(Rank.Three, Suit.Hearts));
 
         //Schofield
-        deck.Add(new Card(CardType.Schofield, Rank.King, Suit.Spades));
-        deck.Add(new Card(CardType.Schofield, Rank.Jack, Suit.Clubs));
-        deck.Add(new Card(CardType.Schofield, Rank.Queen, Suit.Clubs));
+        deck.Add(new Schofield(Rank.King, Suit.Spades));
+        deck.Add(new Schofield(Rank.Jack, Suit.Clubs));
+        deck.Add(new Schofield(Rank.Queen, Suit.Clubs));
 
         //Volcanic
-        deck.Add(new Card(CardType.Volcanic, Rank.Ten, Suit.Spades));
-        deck.Add(new Card(CardType.Volcanic, Rank.Ten, Suit.Clubs));
+        deck.Add(new Volcanic(Rank.Ten, Suit.Spades));
+        deck.Add(new Volcanic(Rank.Ten, Suit.Clubs));
 
         //Carabine
-        deck.Add(new Card(CardType.Carabine, Rank.Ace, Suit.Clubs));
+        deck.Add(new Carabine(Rank.Ace, Suit.Clubs));
 
         //Winchester
-        deck.Add(new Card(CardType.Winchester, Rank.Eight, Suit.Spades));
+        deck.Add(new Winchester(Rank.Eight, Suit.Spades));
 
         //Remington
-        deck.Add(new Card(CardType.Remington, Rank.King, Suit.Clubs));
+        deck.Add(new Remington(Rank.King, Suit.Clubs));
 
         //Jail
         deck.Add(new Card(CardType.Jail, Rank.Ten, Suit.Spades));

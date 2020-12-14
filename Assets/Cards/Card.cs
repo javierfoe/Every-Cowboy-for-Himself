@@ -2,7 +2,7 @@
 
 public abstract class Card
 {
-    public static Card Colt45 = new Card(CardType.Colt45);
+    public static Weapon Colt45 = new Colt45();
 
     public bool IsBrown { get; protected set; }
     public Suit Suit { get; private set; }

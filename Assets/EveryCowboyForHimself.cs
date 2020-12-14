@@ -177,6 +177,13 @@ public static class EveryCowboyForHimself
         } while (pc.IsDead);
         return res;
     }
+    public static void Saloon()
+    {
+        for (int i = 0; i < playerAmount; i++)
+        {
+            players[i].RestoreHealth();
+        }
+    }
 
     public static IEnumerator CardUsed(Player player, Card card)
     {
@@ -209,6 +216,11 @@ public static class EveryCowboyForHimself
         yield return new GatlingCoroutine(players, player, c);
     }
 
+    public static IEnumerator Indians(int player, Card c)
+    {
+        yield return new IndiansCoroutine(players, player, c);
+    }
+
     public static IEnumerator CatBalou(Player player, int target, Selection selection, int cardIndex)
     {
         Player targetPlayer = players[target];
@@ -226,6 +238,33 @@ public static class EveryCowboyForHimself
                 break;
         }
         DiscardCard(c);
+        yield return targetPlayer.StolenBy(player);
+    }
+
+    public static IEnumerator Panic(Player player, int target, Selection drop, int cardIndex)
+    {
+        Player targetPlayer = players[target];
+        Card c = null;
+        switch (drop)
+        {
+            case Selection.Hand:
+                if (target == player.Index)
+                {
+                    c = null;
+                }
+                else
+                {
+                    c = targetPlayer.StealCardFromHand(cardIndex);
+                }
+                break;
+            case Selection.Properties:
+                c = targetPlayer.UnequipCard(cardIndex);
+                break;
+            case Selection.Weapon:
+                c = targetPlayer.UnequipWeapon();
+                break;
+        }
+        if (c != null) player.AddCardHand(c);
         yield return targetPlayer.StolenBy(player);
     }
 

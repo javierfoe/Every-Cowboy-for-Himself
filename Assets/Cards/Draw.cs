@@ -15,3 +15,13 @@ public abstract class Draw : Card
         yield return player.DrawFromCard(numberToDraw);
     }
 }
+
+public class Stagecoach : Draw
+{
+    public Stagecoach(Rank rank, Suit suit) : base(CardType.Stagecoach, rank, suit, 2) { }
+}
+
+public class WellsFargo : Draw
+{
+    public WellsFargo(Rank rank, Suit suit) : base(CardType.Stagecoach, rank, suit, 3) { }
+}

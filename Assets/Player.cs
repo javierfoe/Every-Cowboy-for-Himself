@@ -18,12 +18,12 @@ public class Player
     public int Index { get; private set; }
     public bool IsDead { get; private set; }
     public int HP { get; private set; }
-    public Card Weapon { get; private set; }
+    public Weapon Weapon { get; private set; }
     public Role Role { get; private set; }
     public CharacterName CharacterName { get; private set; }
     protected int BeerHeal { get; set; }
 
-    private int maxHP, index;
+    private int maxHP;
 
     public Player(Role role, CharacterName characterName, int index)
     {
@@ -36,8 +36,9 @@ public class Player
         Weapon = Card.Colt45;
     }
 
-    public void RestoreHealth(int amount)
+    public void RestoreHealth(int amount = 1)
     {
+        if (IsDead) return;
         HP += amount;
         HP = HP > maxHP ? maxHP : HP;
     }
@@ -103,9 +104,9 @@ public class Player
         return RemoveCardList(index, Properties);
     }
 
-    public Card EquipWeapon(Card card)
+    public Weapon EquipWeapon(Weapon card)
     {
-        Card res = null;
+        Weapon res = null;
         if (Weapon != Card.Colt45)
         {
             res = Weapon;
@@ -210,6 +211,10 @@ public class Player
     {
         yield return EveryCowboyForHimself.CatBalou(this, target, selection, cardIndex);
     }
+    public IEnumerator Panic(int target, Selection selection, int cardIndex)
+    {
+        yield return EveryCowboyForHimself.Panic(this, target, selection, cardIndex);
+    }
 
     public IEnumerator DrawFromCard(int amount)
     {
@@ -232,6 +237,8 @@ public class Player
     public virtual IEnumerator StolenBy(Player thief) { yield return null; }
 
     public virtual IEnumerator UsedCard(int player, Card card) { yield return null; }
+
+    public virtual IEnumerator EquipTrigger(Property property) { yield return null; }
 
     public virtual void UsedSkillCard() { }
 

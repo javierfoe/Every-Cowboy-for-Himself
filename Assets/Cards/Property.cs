@@ -3,6 +3,7 @@
 public abstract class Property : Card
 {
     public Property(CardType cardType, Rank rank, Suit suit) : base(cardType, rank, suit) { }
+    protected Property(CardType cardType) : base(cardType) { }
 
     public override IEnumerator CardEffect(Player player, int target, Selection selection, int cardIndex)
     {
@@ -21,5 +22,8 @@ public abstract class Property : Card
 
     public virtual void RemovePropertyEffect(Player player) { }
 
-    protected virtual IEnumerator EquipTrigger(Player player) { yield return null; }
+    protected IEnumerator EquipTrigger(Player player)
+    {
+        yield return player.EquipTrigger(this);
+    }
 }

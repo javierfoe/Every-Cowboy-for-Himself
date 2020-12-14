@@ -75,21 +75,21 @@ public class Board
         List<Card> deck = new List<Card>();
 
         //Bams
-        deck.Add(new Card(CardType.Bam, Rank.Ace, Suit.Spades));
-        deck.Add(new Card(CardType.Bam, Rank.Ace, Suit.Hearts));
-        deck.Add(new Card(CardType.Bam, Rank.Queen, Suit.Hearts));
-        deck.Add(new Card(CardType.Bam, Rank.King, Suit.Hearts));
+        deck.Add(new Bam(Rank.Ace, Suit.Spades));
+        deck.Add(new Bam(Rank.Ace, Suit.Hearts));
+        deck.Add(new Bam(Rank.Queen, Suit.Hearts));
+        deck.Add(new Bam(Rank.King, Suit.Hearts));
         for (int i = 1; i < 14; i++)
-            deck.Add(new Card(CardType.Bam, (Rank)i, Suit.Diamonds));
+            deck.Add(new Bam((Rank)i, Suit.Diamonds));
         for (int i = 2; i < 10; i++)
-            deck.Add(new Card(CardType.Bam, (Rank)i, Suit.Clubs));
+            deck.Add(new Bam((Rank)i, Suit.Clubs));
 
         //Missed
         for (int i = 2; i < 9; i++)
-            deck.Add(new Card(CardType.Missed, (Rank)i, Suit.Spades));
+            deck.Add(new Missed((Rank)i, Suit.Spades));
         for (int i = 10; i < 14; i++)
-            deck.Add(new Card(CardType.Missed, (Rank)i, Suit.Clubs));
-        deck.Add(new Card(CardType.Missed, Rank.Ace, Suit.Clubs));
+            deck.Add(new Missed((Rank)i, Suit.Clubs));
+        deck.Add(new Missed(Rank.Ace, Suit.Clubs));
 
         //Beer
         for (int i = 6; i < 12; i++)
@@ -152,23 +152,23 @@ public class Board
         deck.Add(new Remington(Rank.King, Suit.Clubs));
 
         //Jail
-        deck.Add(new Card(CardType.Jail, Rank.Ten, Suit.Spades));
-        deck.Add(new Card(CardType.Jail, Rank.Jack, Suit.Spades));
-        deck.Add(new Card(CardType.Jail, Rank.Four, Suit.Hearts));
+        deck.Add(new Jail(Rank.Ten, Suit.Spades));
+        deck.Add(new Jail(Rank.Jack, Suit.Spades));
+        deck.Add(new Jail(Rank.Four, Suit.Hearts));
 
         //Mustang
-        deck.Add(new Card(CardType.Mustang, Rank.Eight, Suit.Hearts));
-        deck.Add(new Card(CardType.Mustang, Rank.Nine, Suit.Hearts));
+        deck.Add(new Mustang(Rank.Eight, Suit.Hearts));
+        deck.Add(new Mustang(Rank.Nine, Suit.Hearts));
 
         //Barrel
-        deck.Add(new Card(CardType.Barrel, Rank.Queen, Suit.Spades));
-        deck.Add(new Card(CardType.Barrel, Rank.King, Suit.Spades));
+        deck.Add(new Barrel(Rank.Queen, Suit.Spades));
+        deck.Add(new Barrel(Rank.King, Suit.Spades));
 
         //Scope
-        deck.Add(new Card(CardType.Scope, Rank.Ace, Suit.Spades));
+        deck.Add(new Scope(Rank.Ace, Suit.Spades));
 
         //Dynamite
-        deck.Add(new Card(CardType.Dynamite, Rank.Two, Suit.Hearts));
+        deck.Add(new Dynamite(Rank.Two, Suit.Hearts));
 
         return deck;
     }

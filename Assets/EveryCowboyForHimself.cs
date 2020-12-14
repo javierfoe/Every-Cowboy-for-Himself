@@ -185,6 +185,18 @@ public static class EveryCowboyForHimself
         }
     }
 
+    public static void TradeTwoForOne(Player player, int target, int cardIndex)
+    {
+        Player targetPc = players[target];
+        Card c = player.RemoveCardHand(cardIndex);
+        for (int i = 0; i < 2 && targetPc.Hand.Count > 0; i++)
+        {
+            Card targetCard = targetPc.RemoveCardHand();
+            player.AddCardHand(targetCard);
+        }
+        targetPc.AddCardHand(c);
+    }
+
     public static IEnumerator CardUsed(Player player, Card card)
     {
         int index = player.Index;
@@ -200,6 +212,12 @@ public static class EveryCowboyForHimself
     public static IEnumerator BarrelEffect(Player target, Card c)
     {
         yield return DrawEffect(target.Index, c);
+    }
+
+    public static IEnumerator Shoot(Player player, int target, int misses = 1)
+    {
+        Player targetPlayer = players[target];
+        yield return Shoot(player, targetPlayer, misses);
     }
 
     public static IEnumerator Shoot(Player player, Player target, int misses = 1)

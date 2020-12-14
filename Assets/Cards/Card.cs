@@ -11,7 +11,7 @@ public abstract class Card
 
     public virtual Card Original => null;
 
-    public Card(CardType type)
+    public Card(CardType type = CardType.Special)
     {
         CardType = type;
     }
@@ -96,6 +96,7 @@ public enum Rank
 
 public enum CardType
 {
+    Special,
     Bam,
     Barrel,
     Beer,

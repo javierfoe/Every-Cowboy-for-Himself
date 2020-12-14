@@ -15,6 +15,7 @@ public class Player
     public int Scope { get; protected set; }
     public int RangeModifier { get; protected set; }
     public int Barrels { get; protected set; }
+    public int MissesToDodge { get; protected set; }
     public int Index { get; private set; }
     public bool IsDead { get; private set; }
     public int HP { get; private set; }
@@ -23,7 +24,8 @@ public class Player
     public CharacterName CharacterName { get; private set; }
     protected int BeerHeal { get; set; }
 
-    private int maxHP;
+    private int maxHP, bamsUsed;
+    private bool jail, dynamite;
 
     public Player(Role role, CharacterName characterName, int index)
     {
@@ -64,7 +66,7 @@ public class Player
         Hand.AddRange(drawn);
     }
 
-    public Card RemoveCardHand(int index)
+    public Card RemoveCardHand(int index = -1)
     {
         if (index < 0)
         {
@@ -120,6 +122,61 @@ public class Player
         return EquipWeapon(Card.Colt45);
     }
 
+    public void EquipBarrel()
+    {
+        Barrels++;
+    }
+
+    public void UnequipBarrel()
+    {
+        Barrels--;
+    }
+
+    public void EquipJail()
+    {
+        jail = true;
+    }
+
+    public void UnequipJail()
+    {
+        jail = false;
+    }
+
+    public void EquipDynamite()
+    {
+        dynamite = true;
+    }
+
+    public void UnequipDynamite()
+    {
+        dynamite = false;
+    }
+
+    public void EquipScope()
+    {
+        Scope++;
+    }
+
+    public void UnequipScope()
+    {
+        Scope--;
+    }
+
+    public void EquipMustang()
+    {
+        RangeModifier++;
+    }
+
+    public void UnequipMustang()
+    {
+        RangeModifier--;
+    }
+
+    public void Shot()
+    {
+        bamsUsed++;
+    }
+
     public List<int> PlayersInWeaponRange()
     {
         List<int> result = EveryCowboyForHimself.PlayersInWeaponRange(Index, WeaponRange);
@@ -162,6 +219,11 @@ public class Player
         {
             Phase2();
         }
+    }
+
+    public IEnumerator Shoot(int target)
+    {
+        yield return ShootTrigger(target);
     }
 
     public IEnumerator GetHitBy(Player player, int amount = 1)
@@ -242,14 +304,6 @@ public class Player
 
     public virtual void UsedSkillCard() { }
 
-    protected virtual void CardUsedOutOfTurn() { }
-
-    protected virtual void NoCardTrigger() { }
-
-    protected virtual IEnumerator HitTrigger(Player attacker) { yield return null; }
-
-    protected virtual IEnumerator DieTrigger(Player attacker) { yield return null; }
-
     protected void OriginalHand()
     {
         Card c, original;
@@ -270,6 +324,19 @@ public class Player
         {
             ForceEndTurn();
         }
+    }
+
+    protected virtual void CardUsedOutOfTurn() { }
+
+    protected virtual void NoCardTrigger() { }
+
+    protected virtual IEnumerator HitTrigger(Player attacker) { yield return null; }
+
+    protected virtual IEnumerator DieTrigger(Player attacker) { yield return null; }
+
+    protected virtual IEnumerator ShootTrigger(int target)
+    {
+        yield return EveryCowboyForHimself.Shoot(this, target, MissesToDodge);
     }
 
     private Card RemoveCardList(int index, List<Card> cards)
